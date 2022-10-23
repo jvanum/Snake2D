@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.65438646, g: 0.6603774, b: 0.2703809, a: 1}
+  m_Color: {r: 0.73265153, g: 0.735849, b: 0.4192951, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2349,7 +2349,7 @@ MonoBehaviour:
   - soundType: 6
     audioClip: {fileID: 8300000, guid: cb3cdc709dd0b424fa26ae67d6e332e8, type: 3}
   - soundType: 7
-    audioClip: {fileID: 8300000, guid: 83345a2749b237549bf79fffd2c25a18, type: 3}
+    audioClip: {fileID: 8300000, guid: 90aacfe6a369d4d49bee8381c9781d1e, type: 3}
   - soundType: 8
     audioClip: {fileID: 8300000, guid: 0a80d02f396484a4a9e3b901eefa4f67, type: 3}
 --- !u!4 &1535160109

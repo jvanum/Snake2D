@@ -34,11 +34,14 @@ public class LobbyManager : MonoBehaviour
     {
         SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
         SceneManager.LoadScene(1);
+        SoundManager.Instance.Play(SoundTypes.GAMESTART);
+
     }
     private void StartDualPlayer()
     {
         SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
         SceneManager.LoadScene(2);
+        SoundManager.Instance.Play(SoundTypes.GAMESTART);
     }
 
     private void CloseHelpPanel()
