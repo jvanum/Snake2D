@@ -69,4 +69,10 @@ public class Eatables : MonoBehaviour
     }
 }
 
-  
+
+//items should not spawn on snake
+//if snake is small don't spawn negative food
+//random spawn of power ups on random time interval
+//random spawn of food on random time interval
+//spawns should disappear after some idle time
+//dual player, snake should kill each other

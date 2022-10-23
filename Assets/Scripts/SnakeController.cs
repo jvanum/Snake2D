@@ -1,35 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SnakeController : MonoBehaviour
 {
-    [SerializeField] private float speed = 20f;
-    [SerializeField] private float speedBoost = 1f;
-    [SerializeField] private float powerUpTime = 3f;
+    [SerializeField] private float speed = 16f; // speed of snake
+    [SerializeField] private float speedBoost = 1f; //speed boost for snake/powerup
+    [SerializeField] private float powerUpduration = 3f; // the duration of powerups being active
     private float nextUpdate;
-    private bool canScoreBoost;
-    private bool canShield;
+    private bool canScoreBoost; // bool for scoreboost powerup pickup
+    private bool canShield; // bool for shield powerup pickup
+    [SerializeField] private int initialSize = 4; // num of segments on game start
+    [SerializeField] private int unitsIncrease = 1; // num of segments to grow for snake
+    [SerializeField] private int unitsDecrease = 1; // num of segments to remove for snake
 
-    private Vector2 snakeDirection = Vector2.right;
-    private Vector2 input;
+    private Vector2 snakeDirection = Vector2.right; // initial snake direction
+    private Vector2 input; // input for snake direction
 
     [SerializeField] private ScoreController scoreController;
     [SerializeField] private PauseResume pauseResume;
-    
+    [SerializeField] private GameOver gameOver;
+    private List<Transform> snakeSegments = new();
+    [SerializeField] private Transform snakeBodyPrefab;
+
 
     // Start is called before the first frame update
     private void Start()
     {
-
+        RespawnSnake();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            PauseGame();
-
+        PauseGame();
         SnakeDirection();
     }
     private void FixedUpdate()
@@ -37,7 +42,7 @@ public class SnakeController : MonoBehaviour
         SnakeMovement(speedBoost);
     }
 
-    //takes input for direction of snake
+    //taking input for direction of snake
     private void SnakeDirection()
     {
         //snake can move left/right only when moving up/down
@@ -67,12 +72,70 @@ public class SnakeController : MonoBehaviour
             snakeDirection = input;
         }
 
+        for (int i = snakeSegments.Count - 1; i > 0; i--)
+        {
+            snakeSegments[i].position = snakeSegments[i - 1].position;
+        }
+        
         float x = Mathf.Round(transform.position.x) + snakeDirection.x;
         float y = Mathf.Round(transform.position.y) + snakeDirection.y;
 
         transform.position = new Vector2(x, y);
 
         nextUpdate = Time.time + (1f / (speed * speedBoost));
+    }
+    // increase snake by one segment when eaten positive food
+    private void GrowSnake()
+    {
+        Transform segment = Instantiate(this.snakeBodyPrefab);
+        segment.position = snakeSegments[snakeSegments.Count - 1].position;
+        snakeSegments.Add(segment);
+    }
+    // reduce snake by one segment when eaten negative food
+    private void ReduceSnake()
+    {
+        if (snakeSegments.Count > 4)
+        {
+            Destroy(snakeSegments[snakeSegments.Count - 1].gameObject);
+            snakeSegments.RemoveAt(snakeSegments.Count - 1);
+        }
+    }
+    // respawn snake at start or after death
+    private void RespawnSnake()
+    {
+        for (int i = 1; i < snakeSegments.Count; i++)
+        {
+            Destroy(snakeSegments[i].gameObject);
+        }
+        snakeSegments.Clear();
+        snakeSegments.Add(this.transform);
+
+        for (int i = 1; i < initialSize; i++)
+        {
+            snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
+        }
+        this.transform.position = Vector3.zero;
+    }
+
+    //resets powerups after given time
+    private void ResetPowerUp()
+    {
+        speedBoost = 1f;
+        canShield = false;
+        canScoreBoost = false;
+    }
+
+    // pause game function
+    private void PauseGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
+            Time.timeScale = 0;
+            AudioListener.pause = true;
+            pauseResume.gameObject.SetActive(true);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -93,51 +156,61 @@ public class SnakeController : MonoBehaviour
             transform.position = resetPosition;
         }
 
+        // snake eating itself
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+            if (canShield)
+            {
+                return;
+            }
+            else
+            {
+                SoundManager.Instance.Play(SoundTypes.SNAKEDEATH);
+                gameOver.gameObject.SetActive(true);
+            }
+        }
+        // snake eating different kinds of eatables
         if (collision.gameObject.TryGetComponent(out Eatables eatables))
         {
             if (eatables.eatableTypes == EatableTypes.PositiveFood)
             {
-                scoreController.IncreaseScore(10);
+                for(int i = 0; i < unitsIncrease; i++)
+                {
+                    GrowSnake();
+                }
+                if(canScoreBoost)
+                {
+                    scoreController.IncreaseScore(20);
+                }
+                else
+                {
+                    scoreController.IncreaseScore(10);
+                }
             }
             if (eatables.eatableTypes == EatableTypes.NegativeFood)
             {
+                for (int i = 0; i < unitsDecrease; i++)
+                {
+                    ReduceSnake();
+                }
                 scoreController.DecreaseScore(5);
             }
             if (eatables.eatableTypes == EatableTypes.SpeedUp)
             {
                 speedBoost = 2f;
-                Invoke(nameof(ResetPowerUp), powerUpTime);
+                Invoke(nameof(ResetPowerUp), powerUpduration);
             }
             if (eatables.eatableTypes == EatableTypes.ScoreBoost)
             {
                 canScoreBoost = true;
-                Invoke(nameof(ResetPowerUp), powerUpTime);
+                Invoke(nameof(ResetPowerUp), powerUpduration);
             }
             if (eatables.eatableTypes == EatableTypes.Shield)
             {
                 canShield = true;
-                Invoke(nameof(ResetPowerUp), powerUpTime);
+                Invoke(nameof(ResetPowerUp), powerUpduration);
             }
 
         }
     }
-
-    //resets powerups after given time
-    private void ResetPowerUp()
-    {
-        speedBoost = 1f;
-        canShield = false;
-        canScoreBoost = false;
-    }
-
-    // pause game function
-    private void PauseGame()
-    {
-            SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
-            Time.timeScale = 0;
-            AudioListener.pause = true;
-            pauseResume.gameObject.SetActive(true);
-        
-    }
-
 }
