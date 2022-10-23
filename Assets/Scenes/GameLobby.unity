@@ -1941,12 +1941,12 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.3
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 3.29
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -2350,6 +2350,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: cb3cdc709dd0b424fa26ae67d6e332e8, type: 3}
   - soundType: 7
     audioClip: {fileID: 8300000, guid: 83345a2749b237549bf79fffd2c25a18, type: 3}
+  - soundType: 8
+    audioClip: {fileID: 8300000, guid: 0a80d02f396484a4a9e3b901eefa4f67, type: 3}
 --- !u!4 &1535160109
 Transform:
   m_ObjectHideFlags: 0

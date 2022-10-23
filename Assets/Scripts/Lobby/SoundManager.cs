@@ -10,7 +10,8 @@ public enum SoundTypes
     POSITIVEFOOD,
     NEGATIVEFOOD,
     SPEEDUP,
-    SHIELD
+    SHIELD,
+    SCOREBOOST
 }
 
 [Serializable]
