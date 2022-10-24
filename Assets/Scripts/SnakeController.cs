@@ -7,7 +7,7 @@ public class SnakeController : MonoBehaviour
 {
     [SerializeField] private float speed = 16f; // speed of snake
     [SerializeField] private float speedBoost = 1f; //speed boost for snake/powerup
-    [SerializeField] private float powerUpduration = 3f; // the duration of powerups being active
+    [SerializeField] private float powerUpduration = 6f; // the duration of powerups being active
     private float nextUpdate;
     private bool canScoreBoost; // bool for scoreboost powerup pickup
     private bool canShield; // bool for shield powerup pickup
@@ -19,6 +19,7 @@ public class SnakeController : MonoBehaviour
     private Vector2 input; // input for snake direction
 
     [SerializeField] private ScoreController scoreController;
+    [SerializeField] private TimerIndicator timerIndicator;
     [SerializeField] private PauseResume pauseResume;
     [SerializeField] private GameOver gameOver;
     private List<Transform> snakeSegments = new();
@@ -198,16 +199,25 @@ public class SnakeController : MonoBehaviour
             if (eatables.eatableTypes == EatableTypes.SpeedUp)
             {
                 speedBoost = 2f;
+                timerIndicator.gameObject.SetActive(true);
+                timerIndicator.TimerName("Speed Up ");
+                timerIndicator.TimerStart(powerUpduration);
                 Invoke(nameof(ResetPowerUp), powerUpduration);
             }
             if (eatables.eatableTypes == EatableTypes.ScoreBoost)
             {
                 canScoreBoost = true;
+                timerIndicator.gameObject.SetActive(true);
+                timerIndicator.TimerName("Score Booster ");
+                timerIndicator.TimerStart(powerUpduration);
                 Invoke(nameof(ResetPowerUp), powerUpduration);
             }
             if (eatables.eatableTypes == EatableTypes.Shield)
             {
                 canShield = true;
+                timerIndicator.gameObject.SetActive(true);
+                timerIndicator.TimerName("Shield ");
+                timerIndicator.TimerStart(powerUpduration);
                 Invoke(nameof(ResetPowerUp), powerUpduration);
             }
 

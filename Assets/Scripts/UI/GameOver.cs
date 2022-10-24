@@ -32,6 +32,6 @@ public class GameOver : MonoBehaviour
         AudioListener.pause = false;
         SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
         Time.timeScale = 1;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -16,6 +16,7 @@ public class ScoreController : MonoBehaviour
         RefreshUI();
     }
 
+
     public void IncreaseScore(int increment)
     {
         score += increment;
