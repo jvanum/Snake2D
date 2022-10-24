@@ -124,5 +124,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1a3336908a59645a98497e5988454c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eatableTypes: 1
-  gridArea: {fileID: 0}
+  foodsTypes: 1

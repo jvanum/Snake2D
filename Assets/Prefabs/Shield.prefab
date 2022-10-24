@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9093825318625394869}
   - component: {fileID: 9093825318625394870}
   - component: {fileID: 9093825318625394871}
-  - component: {fileID: 9093825318625394868}
+  - component: {fileID: 1502591454312352615}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
---- !u!114 &9093825318625394868
+--- !u!114 &1502591454312352615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,8 +121,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 9093825318625394864}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be1a3336908a59645a98497e5988454c, type: 3}
+  m_Script: {fileID: 11500000, guid: b227910f63d53304598e8276a646312b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eatableTypes: 2
-  gridArea: {fileID: 0}
+  powerUpsTypes: 0
+  activePower: 3
+  gridArea: {fileID: 7458837604172392375, guid: 7af2d2521ae17fe40b4ad9423d15697d, type: 3}

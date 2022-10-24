@@ -2157,10 +2157,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls : \nUse Arrow keys and W A S D for Movement of Snake\nFood Types
-    : \nPositive Food - Increase size of snake\nNegative Food -Decrease size of snake\nPower
-    Ups  :  \nShield - Protects the snake from dying.\nScore Booster - Boosts score
-    when active.\nSpeed Booster - Boosts speed of snake when active."
+  m_text: "Controls : \nM - Mute Music                      N - Mute Game Sounds\nUse
+    Arrow keys and W A S D for Movement of Snake\nFood Types : \nPositive Food -
+    Increase size of snake\nNegative Food -Decrease size of snake\nPower Ups  : 
+    \nShield - Protects the snake from dying.\nScore Booster - Boosts score when
+    active.\nSpeed Booster - Boosts speed of snake when active."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
