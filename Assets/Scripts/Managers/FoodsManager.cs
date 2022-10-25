@@ -1,87 +1,98 @@
-using System.Collections;
-using UnityEditor;
+using System;
+using System.Reflection;
 using UnityEngine;
 
 public class FoodsManager : MonoBehaviour
 {
     public GameObject[] Foods;
-    private GameObject FoodPositive, FoodNegative;
-    [SerializeField] private Collider2D gridArea;
-    [HideInInspector]public bool hasSpawnfoodp, hasSpawnfoodn;
-    private bool foodAlive;
+    private GameObject FoodPositive;
+    private GameObject FoodNegative;
+    private SnakeController snakeObj;
+    private float foodSpawningIn;
+    private int lengthsnake;
+    private bool canSpawnFoodP;
+    private bool canSpawnFoodN;
+    [SerializeField] private float resetPositiveFoodIn = 15f;
+    [SerializeField] private float resetNegativeFoodIn = 10f;
+
     private void Start()
     {
-        hasSpawnfoodp = true;
-        hasSpawnfoodn = true;
-        ReSpawnFood();
+        canSpawnFoodP = true;
+        canSpawnFoodN = true;
+        FoodSpawningIn();
     }
 
-    IEnumerator TimePassed()
+    private void Update()
     {
-        foodAlive = true;
-        while (foodAlive)
-        {
-            Debug.Log("food coroutine called");
-            yield return new WaitForSeconds(10f);
-            //code here will execute after 10 seconds
-            if (FoodPositive != null)
-            {
-                Debug.Log("positive food coroutine executed");
-                FoodPositive.transform.position = RandomPosition();
-            }
-            if (FoodNegative != null)
-            {
-                Debug.Log("negative food coroutine executed");
-                FoodNegative.transform.position = RandomPosition();
-            }
-        }
+        SnakeLength();
+    }
+    private void Awake()
+    {
+        snakeObj = FindObjectOfType<SnakeController>();
     }
 
-    public void ReSpawnFood()
+    // returns the length of snake
+    private int SnakeLength()
     {
-        if (hasSpawnfoodp)
+        lengthsnake = snakeObj.GetSnakeCount();
+        return lengthsnake;
+    }
+
+    // food will spawn after a few seconds gap
+    private void FoodSpawningIn() 
+    {
+        foodSpawningIn = UnityEngine.Random.Range(1, 4);
+        Invoke(nameof(SpawnFood), foodSpawningIn);
+    }
+
+    // spawns food
+    private void SpawnFood()
+    {
+                     
+        if (canSpawnFoodP)
         {
             FoodPositive = Instantiate(Foods[0]);
-            StartCoroutine(TimePassed());
-            hasSpawnfoodp = false;
+            CancelInvoke(nameof(ResetPosition));
+            FoodPositive.transform.position = GridManager.RandomPosition();
+            canSpawnFoodP = false;
+            InvokeRepeating(nameof(ResetPosition), resetPositiveFoodIn, resetPositiveFoodIn);      // destroys positive food after not picking up
         }
-
-        if (hasSpawnfoodn)
+        if (lengthsnake > 6)   // only spawn negative food when snake length is more than 6
         {
-            FoodNegative = Instantiate(Foods[1]);
-            StartCoroutine(TimePassed());
-            hasSpawnfoodn = false;
+            if (canSpawnFoodN)
+            {
+                FoodNegative = Instantiate(Foods[1]);
+                CancelInvoke(nameof(ResetPosition));
+                FoodNegative.transform.position = GridManager.RandomPosition();
+                canSpawnFoodN = false;
+                InvokeRepeating(nameof(ResetPosition), resetNegativeFoodIn, resetNegativeFoodIn);      // destroys negative food after not picking up
+            }
         }
-
     }
 
-    public void DestroyFoodPositive()
+    private void ResetPosition()
     {
-        foodAlive = false;
+        if (FoodPositive != null)
+        {
+            Debug.Log("POSITIVE Food RESET");
+            FoodPositive.transform.position = GridManager.RandomPosition();
+        }
+        else if (FoodNegative != null)
+        { 
+            FoodNegative.transform.position = GridManager.RandomPosition();
+        }
+    }
+    public void DestroyFoodP()
+    {
         Destroy(FoodPositive);
-        Debug.Log("Positive food destroyed");
+        canSpawnFoodP = true;
+        SpawnFood();
     }
 
-    public void DestroyFoodNegative()
+    public void DestroyFoodN()
     {
-        foodAlive = false;
         Destroy(FoodNegative);
-        Debug.Log("Negative food destroyed");
-
-    }
-
-    public Vector2 RandomPosition()
-    {
-        Bounds bounds = gridArea.bounds;
-        // spawn at random position on gridarea
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
-
-        x = Mathf.Round(x);
-        y = Mathf.Round(y);
-
-        Vector2 randomPosition = new Vector2(x, y);
-
-        return randomPosition;
+        canSpawnFoodN = true;
+        FoodSpawningIn();
     }
 }

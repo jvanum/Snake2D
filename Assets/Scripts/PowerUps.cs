@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-
 public enum PowerUpsTypes
 {
     Shield,
@@ -11,8 +9,4 @@ public enum PowerUpsTypes
 public class PowerUps : MonoBehaviour
 {
     public PowerUpsTypes powerUpsTypes;
-    private void Start()
-    {
-     
-    }
 }

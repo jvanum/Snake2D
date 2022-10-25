@@ -148,7 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 16
   speedBoost: 1
-  powerUpDuration: 7
   initialSize: 4
   unitsIncrease: 1
   unitsDecrease: 1
@@ -156,5 +155,7 @@ MonoBehaviour:
   timerIndicator: {fileID: 0}
   pauseResume: {fileID: 0}
   gameOver: {fileID: 0}
-  powerUpsManager: {fileID: 0}
+  powerUpsManager: {fileID: 4643003300690343739, guid: a19d866b030f4034a8c8d641d2852171, type: 3}
+  foodsManager: {fileID: 1898189937153576155, guid: 1a1ed959ed0be984daf1c795a651772f, type: 3}
   snakeBodyPrefab: {fileID: 2123734468662219341, guid: 67cadf777cb566e4f82f09c160d49ffb, type: 3}
+  gridArea: {fileID: 7458837604172392375, guid: 7af2d2521ae17fe40b4ad9423d15697d, type: 3}

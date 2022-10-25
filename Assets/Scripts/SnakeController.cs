@@ -1,17 +1,26 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class SnakeController : MonoBehaviour
 {
-    [SerializeField] private float speed = 16f; // speed of snake
-    [SerializeField] private float speedBoost = 1f; //speed boost for snake/powerup
-    [SerializeField] private int initialSize = 4; // num of segments on game start
-    [SerializeField] private int unitsIncrease = 1; // num of segments to grow for snake
-    [SerializeField] private int unitsDecrease = 1; // num of segments to remove for snake
-    private float powerUpDuration; // the duration of powerups being active
+    private void QuitGame()
+    {  //DELETE IT AFTER TESTING
+        UnityEditor.EditorApplication.ExitPlaymode();
+        Debug.Log("Application quitted after idle----testing");
+    }
+
+
+    [SerializeField] private float speed = 16f;             // speed of snake
+    [SerializeField] private float speedBoost = 1f;         //speed boost for snake/powerup
+    [SerializeField] private int initialSize = 4;           // num of segments on game start
+    [SerializeField] private int unitsIncrease = 1;         // num of segments to grow for snake
+    [SerializeField] private int unitsDecrease = 1;         // num of segments to remove for snake
+    private float powerUpDuration;                          // the duration of powerups being active
     private float nextUpdate;
-    private bool canScoreBoost; // bool for scoreboost powerup pickup
-    private bool canShield; // bool for shield powerup pickup
+    private bool canScoreBoost;                             // bool for scoreboost powerup pickup
+    private bool canShield;                                 // bool for shield powerup pickup
+    private int snakelength;                                 // length of snake
 
     private Vector2 snakeDirection = Vector2.right; // initial snake direction
     private Vector2 input; // input for snake direction
@@ -30,9 +39,9 @@ public class SnakeController : MonoBehaviour
     private void Start()
     {
         RespawnSnake();
+        Invoke(nameof(QuitGame), 300f);// DELETEAFTERTESTING
     }
 
-    // Update is called once per frame
     private void Update()
     {
         PauseGame();
@@ -43,11 +52,18 @@ public class SnakeController : MonoBehaviour
         SnakeMovement(speedBoost);
     }
 
-    private float RandomDuration()   //randow powerup duration
+    //random powerup active duration
+    private float RandomDuration()   
     {
-        powerUpDuration = Random.Range(5, 10);
+        powerUpDuration = Random.Range(5, 13);
         return powerUpDuration;
-        
+    }
+
+    // getter for snake length
+    public int GetSnakeCount()
+    {
+        snakelength = snakeSegments.Count;
+        return snakelength;
     }
 
     //taking input for direction of snake
@@ -125,6 +141,19 @@ public class SnakeController : MonoBehaviour
         this.transform.position = Vector3.zero;
     }
 
+    //bool - grid position occupied by snake
+    public bool Occupies(float x, float y)
+    {
+        foreach (Transform segment in snakeSegments)
+        {
+            if (segment.position.x == x && segment.position.y == y)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     // pause game function
     private void PauseGame()
@@ -142,12 +171,11 @@ public class SnakeController : MonoBehaviour
     //resets powerups after given time
     private void ResetPowerUp()
     {
-        powerUpsManager.hasSpawn = true;
-        powerUpsManager.ReSpawnPowerUp();
         speedBoost = 1f;
         canShield = false;
         canScoreBoost = false;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // reset position on colliding border, screen wrapping for all the directions
@@ -166,7 +194,7 @@ public class SnakeController : MonoBehaviour
             transform.position = resetPosition;
         }
 
-        // snake eating itself
+        // snake Death
         if (collision.gameObject.CompareTag("Respawn"))
         {
             if (canShield)
@@ -186,33 +214,24 @@ public class SnakeController : MonoBehaviour
             if (powerUps.powerUpsTypes == PowerUpsTypes.SpeedUp)
             {
                 SoundManager.Instance.Play(SoundTypes.SPEEDUP);
-                Debug.Log("speedup collected");
                 speedBoost = 2f;
-                timerIndicator.gameObject.SetActive(true);
                 timerIndicator.TimerName("Speed Up ");
-                timerIndicator.TimerStart(powerUpDuration);
-                Invoke(nameof(ResetPowerUp), powerUpDuration);
             }
             else if (powerUps.powerUpsTypes == PowerUpsTypes.ScoreBoost)
             {
                 SoundManager.Instance.Play(SoundTypes.SCOREBOOST);
-                Debug.Log("Scoreboost collected");
                 canScoreBoost = true;
-                timerIndicator.gameObject.SetActive(true);
                 timerIndicator.TimerName("Score Booster ");
-                timerIndicator.TimerStart(powerUpDuration);
-                Invoke(nameof(ResetPowerUp), powerUpDuration);
             }
             else if (powerUps.powerUpsTypes == PowerUpsTypes.Shield)
             {
                 SoundManager.Instance.Play(SoundTypes.SHIELD);
-                Debug.Log("shield collected");
                 canShield = true;
-                timerIndicator.gameObject.SetActive(true);
                 timerIndicator.TimerName("Shield ");
-                timerIndicator.TimerStart(powerUpDuration);
-                Invoke(nameof(ResetPowerUp), powerUpDuration);
             }
+            timerIndicator.gameObject.SetActive(true);
+            timerIndicator.TimerStart(powerUpDuration);
+            Invoke(nameof(ResetPowerUp), powerUpDuration);
             powerUpsManager.DestroyPowerUp();
 
         }
@@ -231,11 +250,7 @@ public class SnakeController : MonoBehaviour
                 { scoreController.IncreaseScore(20); }
                 else
                 { scoreController.IncreaseScore(10); }
-
-                foodsManager.DestroyFoodPositive();
-                foodsManager.hasSpawnfoodp = true;
-                foodsManager.ReSpawnFood();
-
+                foodsManager.DestroyFoodP(); 
             }
             else if (foods.foodsTypes == FoodsTypes.NegativeFood)
             {
@@ -249,13 +264,13 @@ public class SnakeController : MonoBehaviour
                     }
                     scoreController.DecreaseScore(5);
                 }
-                foodsManager.DestroyFoodNegative();
-                foodsManager.hasSpawnfoodn = true;
-                foodsManager.ReSpawnFood();
+                foodsManager.DestroyFoodN();
             }
             
+
         }
 
 
     }
+
 }

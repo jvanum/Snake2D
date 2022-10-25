@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4643003300690343736}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -48,6 +48,5 @@ MonoBehaviour:
   - {fileID: 5664671678420788199, guid: 8e6a497d52c1e3241b8e05eb6a64cefe, type: 3}
   - {fileID: 9093825318625394864, guid: a272bf7c4f9d0ae48954b72c5d9a2bd1, type: 3}
   - {fileID: 4959746702494987197, guid: de17bbf913802ee4c8a80d06e94ca191, type: 3}
+  canSpawnPower: 1
   gridArea: {fileID: 7458837604172392375, guid: 7af2d2521ae17fe40b4ad9423d15697d, type: 3}
-  hasSpawn: 0
-  powerLifeSpan: 10
