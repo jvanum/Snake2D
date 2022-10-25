@@ -136,7 +136,6 @@ public class SnakeController : MonoBehaviour
             AudioListener.pause = true;
             pauseResume.gameObject.SetActive(true);
         }
-
     }
 
 
@@ -227,14 +226,12 @@ public class SnakeController : MonoBehaviour
                 {
                     GrowSnake();
                 }
+
                 if (canScoreBoost)
-                {
-                    scoreController.IncreaseScore(20);
-                }
+                { scoreController.IncreaseScore(20); }
                 else
-                {
-                    scoreController.IncreaseScore(10);
-                }
+                { scoreController.IncreaseScore(10); }
+
                 foodsManager.DestroyFoodPositive();
                 foodsManager.hasSpawnfoodp = true;
                 foodsManager.ReSpawnFood();

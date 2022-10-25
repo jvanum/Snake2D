@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using UnityEditor;
 
 public enum FoodsTypes
 {
@@ -8,6 +10,11 @@ public enum FoodsTypes
 public class Foods : MonoBehaviour
 {
     public FoodsTypes foodsTypes;
+
+    private void Start()
+    {
+
+    }
 
 }
 
