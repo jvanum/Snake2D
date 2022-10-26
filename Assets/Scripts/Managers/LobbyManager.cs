@@ -19,6 +19,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private GameObject LobbyScreen;
     [SerializeField] private GameObject LevelScreen;
     [SerializeField] private GameObject HelpScreen;
+
     private void Awake()
     {
         buttonPlay.onClick.AddListener(ChooseLevels);
@@ -42,6 +43,7 @@ public class LobbyManager : MonoBehaviour
         SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
         SceneManager.LoadScene(2);
         SoundManager.Instance.Play(SoundTypes.GAMESTART);
+
     }
 
     private void CloseHelpPanel()
