@@ -159,8 +159,7 @@ public class Snakes : MonoBehaviour
             {
                 snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
             }
-            Debug.Log("Snake1 spawned");
-            transform.position = new Vector2(10,-10);
+            transform.position = new Vector2(10, -10);
         }
       
         if (snakesTypes == SnakesTypes.Snake2)
@@ -176,8 +175,6 @@ public class Snakes : MonoBehaviour
                 {
                     snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
                 }
-                Debug.Log("Snake2 spawned");
-
                 transform.position = new Vector2(5, 5);
             }
     }

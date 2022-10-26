@@ -3,14 +3,13 @@ public class GridManager : MonoBehaviour
 {
     public static Bounds bounds;
     BoxCollider2D boxCollider2D;
-    private Snakes _snake;
+    private static Snakes snakes;
 
     private void Awake()
     {
         boxCollider2D = GetComponent<BoxCollider2D>();
         bounds = boxCollider2D.bounds;
-        _snake = FindObjectOfType<Snakes>();
-
+        snakes = FindObjectOfType<Snakes>();
     }
     public static Vector2 RandomPosition()
     {
@@ -19,6 +18,22 @@ public class GridManager : MonoBehaviour
 
         x = Mathf.Round(x);
         y = Mathf.Round(y);
+
+        while (snakes.Occupies(x, y))
+        {
+            x++;
+
+            if (x > bounds.max.x)
+            {
+                x = bounds.min.x;
+                y++;
+
+                if (y > bounds.max.y)
+                {
+                    y = bounds.min.y;
+                }
+            }
+        }
 
         Vector2 randomPosition = new Vector2(x, y);
         return randomPosition;
