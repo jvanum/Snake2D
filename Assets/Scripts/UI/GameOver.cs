@@ -11,8 +11,8 @@ public class GameOver : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 0;
         AudioListener.pause = true;
+        Time.timeScale = 0;
     }
     private void Awake()
     {

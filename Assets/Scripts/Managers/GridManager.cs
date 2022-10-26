@@ -3,13 +3,13 @@ public class GridManager : MonoBehaviour
 {
     public static Bounds bounds;
     BoxCollider2D boxCollider2D;
-    private SnakeController _snake;
+    private Snakes _snake;
 
     private void Awake()
     {
         boxCollider2D = GetComponent<BoxCollider2D>();
         bounds = boxCollider2D.bounds;
-        _snake = FindObjectOfType<SnakeController>();
+        _snake = FindObjectOfType<Snakes>();
 
     }
     public static Vector2 RandomPosition()

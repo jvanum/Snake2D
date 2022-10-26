@@ -7,7 +7,7 @@ public class FoodsManager : MonoBehaviour
     public GameObject[] Foods;
     private GameObject FoodPositive;
     private GameObject FoodNegative;
-    private SnakeController snakeObj;
+    private Snakes snakeObj;
     private float foodSpawningIn;
     private int lengthsnake;
     private bool canSpawnFoodP;
@@ -28,7 +28,7 @@ public class FoodsManager : MonoBehaviour
     }
     private void Awake()
     {
-        snakeObj = FindObjectOfType<SnakeController>();
+        snakeObj = FindObjectOfType<Snakes>();
     }
 
     // returns the length of snake

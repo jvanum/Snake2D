@@ -2,18 +2,19 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
-public class SnakeController : MonoBehaviour
+public enum SnakesTypes
 {
-    private void QuitGame()
-    {  //DELETE IT AFTER TESTING
-        UnityEditor.EditorApplication.ExitPlaymode();
-        Debug.Log("Application quitted after idle----testing");
-    }
-
-
+    Snake1,
+    Snake2
+}
+public class Snakes : MonoBehaviour
+{
+    public SnakesTypes snakesTypes;
     [SerializeField] private float speed = 16f;             // speed of snake
     [SerializeField] private float speedBoost = 1f;         //speed boost for snake/powerup
-    [SerializeField] private int initialSize = 4;           // num of segments on game start
+    [SerializeField] private int initialSizeSnake1 = 4;           // num of segments of snake1 on game start
+    [SerializeField] private int initialSizeSnake2 = 5;           // num of segments of snake2 on game start
+
     [SerializeField] private int unitsIncrease = 1;         // num of segments to grow for snake
     [SerializeField] private int unitsDecrease = 1;         // num of segments to remove for snake
     private float powerUpDuration;                          // the duration of powerups being active
@@ -26,6 +27,7 @@ public class SnakeController : MonoBehaviour
     private Vector2 input; // input for snake direction
 
     [SerializeField] private ScoreController scoreController;
+    [SerializeField] private ScoreController scoreController2;
     [SerializeField] private TimerIndicator timerIndicator;
     [SerializeField] private PauseResume pauseResume;
     [SerializeField] private GameOver gameOver;
@@ -39,7 +41,6 @@ public class SnakeController : MonoBehaviour
     private void Start()
     {
         RespawnSnake();
-        Invoke(nameof(QuitGame), 300f);// DELETEAFTERTESTING
     }
 
     private void Update()
@@ -69,17 +70,35 @@ public class SnakeController : MonoBehaviour
     //taking input for direction of snake
     private void SnakeDirection()
     {
-        //snake can move left/right only when moving up/down
-        if (snakeDirection.y != 0f)
+        if (snakesTypes == SnakesTypes.Snake1)
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) { input = Vector2.left; }
-            else if (Input.GetKeyDown(KeyCode.RightArrow)) { input = Vector2.right; }
+            //snake can move left/right only when moving up/down
+            if (snakeDirection.y != 0f)
+            {
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) { input = Vector2.left; }
+                else if (Input.GetKeyDown(KeyCode.RightArrow)) { input = Vector2.right; }
+            }
+            //snake can move up/down only when moving left/right
+            if (snakeDirection.x != 0f)
+            {
+                if (Input.GetKeyDown(KeyCode.UpArrow)) { input = Vector2.up; }
+                else if (Input.GetKeyDown(KeyCode.DownArrow)) { input = Vector2.down; }
+            }
         }
-        //snake can move up/down only when moving left/right
-        if (snakeDirection.x != 0f)
+        if (snakesTypes == SnakesTypes.Snake2)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow)) { input = Vector2.up; }
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) { input = Vector2.down; }
+            //snake can move left/right only when moving up/down
+            if (snakeDirection.y != 0f)
+            {
+                if (Input.GetKeyDown(KeyCode.A)) { input = Vector2.left; }
+                else if (Input.GetKeyDown(KeyCode.D)) { input = Vector2.right; }
+            }
+            //snake can move up/down only when moving left/right
+            if (snakeDirection.x != 0f)
+            {
+                if (Input.GetKeyDown(KeyCode.W)) { input = Vector2.up; }
+                else if (Input.GetKeyDown(KeyCode.S)) { input = Vector2.down; }
+            }
         }
 
     }
@@ -127,18 +146,40 @@ public class SnakeController : MonoBehaviour
     // respawn snake at start or after death
     private void RespawnSnake()
     {
-        for (int i = 1; i < snakeSegments.Count; i++)
+        if (snakesTypes == SnakesTypes.Snake1)
         {
-            Destroy(snakeSegments[i].gameObject);
-        }
-        snakeSegments.Clear();
-        snakeSegments.Add(this.transform);
+            for (int i = 1; i < snakeSegments.Count; i++)
+            {
+                Destroy(snakeSegments[i].gameObject);
+            }
+            snakeSegments.Clear();
+            snakeSegments.Add(this.transform);
 
-        for (int i = 1; i < initialSize; i++)
-        {
-            snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
+            for (int i = 1; i < initialSizeSnake1; i++)
+            {
+                snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
+            }
+            Debug.Log("Snake1 spawned");
+            transform.position = new Vector2(10,-10);
         }
-        this.transform.position = Vector3.zero;
+      
+        if (snakesTypes == SnakesTypes.Snake2)
+            {
+                for (int i = 1; i < snakeSegments.Count; i++)
+                {
+                    Destroy(snakeSegments[i].gameObject);
+                }
+                snakeSegments.Clear();
+                snakeSegments.Add(this.transform);
+
+                for (int i = 1; i < initialSizeSnake2; i++)
+                {
+                    snakeSegments.Add(Instantiate(this.snakeBodyPrefab));
+                }
+                Debug.Log("Snake2 spawned");
+
+                transform.position = new Vector2(5, 5);
+            }
     }
 
     //bool - grid position occupied by snake
@@ -245,11 +286,20 @@ public class SnakeController : MonoBehaviour
                 {
                     GrowSnake();
                 }
-
-                if (canScoreBoost)
-                { scoreController.IncreaseScore(20); }
-                else
-                { scoreController.IncreaseScore(10); }
+                if (snakesTypes == SnakesTypes.Snake1)
+                {
+                    if (canScoreBoost)
+                    { scoreController.IncreaseScore(20); }
+                    else
+                    { scoreController.IncreaseScore(10); }
+                } 
+                else if (snakesTypes == SnakesTypes.Snake2)
+                {
+                    if (canScoreBoost)
+                    { scoreController2.IncreaseScore(20); }
+                    else
+                    { scoreController2.IncreaseScore(10); }
+                }
                 foodsManager.DestroyFoodP(); 
             }
             else if (foods.foodsTypes == FoodsTypes.NegativeFood)
@@ -262,7 +312,14 @@ public class SnakeController : MonoBehaviour
                     {
                         ReduceSnake();
                     }
-                    scoreController.DecreaseScore(5);
+                    if (snakesTypes == SnakesTypes.Snake1)
+                    {
+                        scoreController.DecreaseScore(5);
+                    } 
+                    else if (snakesTypes == SnakesTypes.Snake2)
+                    {
+                        scoreController2.DecreaseScore(5);
+                    }
                 }
                 foodsManager.DestroyFoodN();
             }

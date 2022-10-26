@@ -30,8 +30,6 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource soundEffect;
     public AudioSource music;
-    public Toggle MusicToggle;
-    public Toggle SFXToggle;
     public Sounds[] sounds;
 
     private void Start()
@@ -57,28 +55,8 @@ public class SoundManager : MonoBehaviour
             music.mute = !music.mute;
         if (Input.GetKeyDown(KeyCode.N))
             soundEffect.mute = !soundEffect.mute;
-        MuteSounds();
     }
 
-    private void MuteSounds()
-    {
-        if (MusicToggle.isOn)
-        {
-            music.mute = false;
-        }
-        else
-        {
-            music.mute = true;
-        }
-        if (SFXToggle.isOn)
-        {
-            soundEffect.mute = false;
-        }
-        else
-        {
-            soundEffect.mute = true;
-        }
-    }
     public void PlayMusic(SoundTypes soundType)
     {
         if (music.isPlaying)
