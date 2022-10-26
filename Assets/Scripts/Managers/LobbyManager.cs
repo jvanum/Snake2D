@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Path.GUIFramework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -63,9 +62,7 @@ public class LobbyManager : MonoBehaviour
     private void QuitGame()
     {
         SoundManager.Instance.Play(SoundTypes.BUTTONCLICK);
-        UnityEditor.EditorApplication.ExitPlaymode();
         Application.Quit();
-        Debug.Log("Application quit");
     }
 
     private void Help()
