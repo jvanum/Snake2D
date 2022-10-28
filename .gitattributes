@@ -63,5 +63,4 @@
 #*.RTF   diff=astextplain
 
 
-shader/* linguist-vendored
-cginc/* linguist-vendored
+**/shaders/* linguist-vendored
