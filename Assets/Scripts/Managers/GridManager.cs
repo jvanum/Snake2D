@@ -3,7 +3,8 @@ public class GridManager : MonoBehaviour
 {
     public static Bounds bounds;
     private BoxCollider2D boxCollider2D;
-    private static Snakes snakes;
+    private static Snakes snakes1;
+    private static Snakes snakes2;
 
     private void Awake()
     {
