@@ -2,7 +2,7 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public static Bounds bounds;
-    BoxCollider2D boxCollider2D;
+    private BoxCollider2D boxCollider2D;
     private static Snakes snakes;
 
     private void Awake()

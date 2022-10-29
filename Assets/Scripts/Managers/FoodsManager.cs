@@ -74,7 +74,6 @@ public class FoodsManager : MonoBehaviour
     {
         if (FoodPositive != null)
         {
-            Debug.Log("POSITIVE Food RESET");
             FoodPositive.transform.position = GridManager.RandomPosition();
         }
         else if (FoodNegative != null)
